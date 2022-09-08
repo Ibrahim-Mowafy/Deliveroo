@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "deliveroo",
+    "owner": "ibrahimmowafy",
     "slug": "deliveroo",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,9 +15,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
