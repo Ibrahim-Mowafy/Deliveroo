@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, Image, TextInput, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,13 +11,32 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Categories from '../components/Categories';
 import FeaturesRows from '../components/FeaturesRows';
+import client from '../sanity';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [featuredCategory, setFeaturedCategory] = useState([]);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
+  }, []);
+
+  useEffect(() => {
+    client
+      .fetch(
+        `*[_type == "featured"]{
+      ...,restaurant[]->{
+        ...,dishes[]->
+      }
+    }`
+      )
+      .then((result) => {
+        setFeaturedCategory(result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   return (
@@ -54,28 +73,20 @@ const HomeScreen = () => {
       <ScrollView
         className="bg-gray-100"
         contentContainerStyle={{ paddingBottom: 100 }}
+        showsVerticalScrollIndicator={false}
       >
         {/* Categories */}
         <Categories />
 
         {/* Features rows */}
-        <FeaturesRows
-          id="test1"
-          title="Featured"
-          description="Paid placements form our partners"
-        />
-        {/* Tasty Discounts */}
-        <FeaturesRows
-          id="test2"
-          title="Tasty Discounts"
-          description="Paid placements form our partners"
-        />
-        {/* Offers near you */}
-        <FeaturesRows
-          id="test3"
-          title="Offers near you!"
-          description="Paid placements form our partners"
-        />
+        {featuredCategory?.map((category) => (
+          <FeaturesRows
+            key={category._id}
+            id={category._id}
+            title={category.name}
+            description={category.short_description}
+          />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
