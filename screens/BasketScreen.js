@@ -4,6 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { XCircleIcon } from 'react-native-heroicons/solid';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import LottieView from 'lottie-react-native';
+import { ArrowLongLeftIcon } from 'react-native-heroicons/solid';
+import Currency from 'react-currency-formatter';
 
 import { selectedRestaurant } from '../store/restaurantSlice';
 import {
@@ -12,7 +15,6 @@ import {
   selectedBasketItems,
 } from '../store/basketSlice';
 import { urlFor } from '../sanity';
-import Currency from 'react-currency-formatter';
 
 const BasketScreen = () => {
   const navigation = useNavigation();
@@ -31,7 +33,35 @@ const BasketScreen = () => {
     setGroupedItemsInBasket(groupedItems);
   }, [items]);
 
-  if (items.length === 0) return null;
+  if (items.length === 0)
+    return (
+      <View className="flex-1 justify-center items-center p-3 relative bg-white">
+        <TouchableOpacity
+          onPress={navigation.goBack}
+          className="absolute top-14 left-5 p-2 bg-gray-100 rounded-full"
+        >
+          <ArrowLongLeftIcon size={20} color="#00cc88" />
+        </TouchableOpacity>
+        <LottieView
+          source={require('../assets/delivery-guy-waiting.json')}
+          autoPlay
+          loop
+          className="w-11/12"
+        />
+        <Text className="text-3xl text-center">Hey, your basket is empty!</Text>
+        <Text className="text-md text-gray-400 mt-5">
+          Go on, stock up and order your faves.
+        </Text>
+        <TouchableOpacity
+          className="mt-5 rounded-lg bg-accent p-4 w-10/12"
+          onPress={() => navigation.goBack()}
+        >
+          <Text className="text-white text-center text-lg font-semibold">
+            Add Items
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
 
   return (
     <SafeAreaView className="flex-1 bg-white">
