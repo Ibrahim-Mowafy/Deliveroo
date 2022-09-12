@@ -1,8 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
+import { Provider } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import RestaurantScreen from './screens/RestaurantScreen';
-import { Provider } from 'react-redux';
 import { store } from './store/store';
 import BasketScreen from './screens/BasketScreen';
 import PreparingOrderScreen from './screens/PreparingOrderScreen';

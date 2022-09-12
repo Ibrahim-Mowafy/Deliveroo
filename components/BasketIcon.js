@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectedBasketItems } from '../store/basketSlice';
@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 import { selectBasketTotal } from '../store/basketSlice';
 import Currency from 'react-currency-formatter';
 import * as Animatable from 'react-native-animatable';
-
 
 const BasketIcon = () => {
   const items = useSelector(selectedBasketItems);
