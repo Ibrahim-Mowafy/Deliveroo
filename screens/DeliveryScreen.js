@@ -1,16 +1,22 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { XMarkIcon } from 'react-native-heroicons/solid';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { selectedRestaurant } from '../store/restaurantSlice';
 import * as Progress from 'react-native-progress';
+import { resetBasket } from '../store/basketSlice';
 
 const DeliveryScreen = () => {
   const navigation = useNavigation();
   const restaurant = useSelector(selectedRestaurant);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetBasket());
+  }, []);
 
   return (
     <View className="bg-accent flex-1">
