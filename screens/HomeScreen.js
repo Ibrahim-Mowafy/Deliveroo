@@ -1,5 +1,17 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { View, Text, Image, TextInput, ScrollView } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -13,7 +25,19 @@ import Categories from '../components/Categories';
 import FeaturesRows from '../components/FeaturesRows';
 import client from '../sanity';
 
+const fetchRestaurants = () => {
+  return client.fetch(
+    `*[_type == "featured"]{
+    ...,restaurant[]->{
+      ...,dishes[]->
+      }
+    }`
+  );
+};
+
 const HomeScreen = () => {
+  const [refreshing, setRefreshing] = useState(false);
+
   const navigation = useNavigation();
   const [featuredCategory, setFeaturedCategory] = useState([]);
   useLayoutEffect(() => {
@@ -23,20 +47,22 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "featured"]{
-      ...,restaurant[]->{
-        ...,dishes[]->
-      }
-    }`
-      )
-      .then((result) => {
-        setFeaturedCategory(result);
+    fetchRestaurants()
+      .then((responseData) => {
+        setFeaturedCategory(responseData);
       })
       .catch((err) => {
         console.error(err);
       });
+  }, []);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchRestaurants().then((responseData) => {
+      setFeaturedCategory(responseData);
+
+      setRefreshing(false);
+    });
   }, []);
 
   return (
@@ -74,6 +100,13 @@ const HomeScreen = () => {
         className="bg-gray-100"
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#00cc88']}
+          />
+        }
       >
         {/* Categories */}
         <Categories />
