@@ -3,14 +3,15 @@
     "name": "deliveroo",
     "owner": "ibrahimmowafy",
     "slug": "deliveroo",
+    "description": "Deliveroo is an online food ordering by browsing through menus with complete images and descriptions for each restaurant",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-d.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon-d.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#00ccbb"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
