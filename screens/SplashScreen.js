@@ -9,7 +9,7 @@ const SplashScreen = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('Home');
+      navigation.replace('Home');
     }, 1000);
   }, []);
 
@@ -28,9 +28,7 @@ const SplashScreen = () => {
           loop
         />
       </Animatable.View>
-      <Animatable.Text className="text-white italic text-4xl font-bold">
-        Deliveroo
-      </Animatable.Text>
+      <Text className="text-white italic text-4xl font-bold">Deliveroo</Text>
     </View>
   );
 };
