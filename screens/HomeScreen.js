@@ -24,6 +24,7 @@ import { useNavigation } from '@react-navigation/native';
 import Categories from '../components/Categories';
 import FeaturesRows from '../components/FeaturesRows';
 import client from '../sanity';
+import * as Progress from 'react-native-progress';
 
 const fetchRestaurants = () => {
   return client.fetch(
@@ -37,6 +38,7 @@ const fetchRestaurants = () => {
 
 const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
   const [featuredCategory, setFeaturedCategory] = useState([]);
@@ -47,12 +49,16 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     fetchRestaurants()
       .then((responseData) => {
         setFeaturedCategory(responseData);
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -64,6 +70,18 @@ const HomeScreen = () => {
       setRefreshing(false);
     });
   }, []);
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Progress.Circle
+          size={60}
+          indeterminate={true}
+          color="#00cc88"
+        ></Progress.Circle>
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView className="bg-white pt-3 pb-5">
